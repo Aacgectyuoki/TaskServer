@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager 2.0</title>
+</head>
+<body>
+    <h2>Task Manager 2.0</h2>
+    <form>
+        <label>Emp ID</label>
+        <input type="number" name="empID" id="empID"><br/>
+        <label>Task ID</label>
+        <input type="number" name="taskID" id="taskID"><br/>
+        <label>Task</label>
+        <input type="text" name="task" id="task"><br/>
+        <label>Due Date</label>
+        <input type="text" name="dueDate" id="dueDate"><br/>
+        <input type="button" value="Add Details" onclick="addDetailsButton()" />
+    </form>
+    <hr/>
+    <table id="taskTable">
+        <thead>
+            <tr>
+                <th>Emp ID</th>
+                <th>Task ID</th>
+                <th>Task</th>
+                <th>Due Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+<script>
+    var data=[];
+  function storeInSession() {
+    sessionStorage.setItem("toDo",JSON.stringify(data));
+  }
+  function retrieveFromSession() {
+      var obj = JSON.parse(sessionStorage.getItem("toDo"));
+      console.log(obj);
+  }
+  function addDetailsButton() {
+      var formData = readData();
+      newRows(formData);
+      resetForm();
+      data.push(formData);
+      console.log(data)
+  }
+  function readData() {
+      var formData={};
+      formData.empID=document.getElementById("empID").value;
+      formData.taskID=document.getElementById("taskID").value;
+      formData.task = document.getElementById("task").value;
+      formData.dueDate = document.getElementById("dueDate").value;
+      return formData;
+  }
+  function newRows(formData) {
+      var table = document.getElementById("taskTable");
+      var tableBody = table.getElementsByTagName("tbody")[0];
+      var newRow = tableBody.insertRow(tableBody.length);
+      var cell1 = newRow.insertCell(0);
+      cell1.innerHTML=formData.empID;
+      var cell2 =newRow.insertCell(1);
+      cell2.innerHTML= formData.taskID;
+      var cell3 =newRow.insertCell(2);
+      cell3.innerHTML= formData.task;
+      var cell4 = newRow.insertCell(3);
+      cell4.innerHTML= formData.dueDate;
+      var cell5 = newRow.insertCell(4);
+      cell5.innerHTML="<a href='#' onclick='delet(this)'>X</a>";
+  }
+
+  function delet(data){
+      var row = data.parentElement.parentElement;
+      document.getElementById("taskTable").deleteRow(row.rowIndex);
+  }
+
+  var data;
+  function update(data){
+      this.data = data;
+      var row = data.parentElement.parentElement;
+      var cells = row.getElementsByTagName("td");
+      var empID = cells[0].innerHTML;
+      var taskID =  cells[1].innerHTML;
+      var task =  cells[2].innerHTML;
+      var dueDate = cells[3].innerHTML;
+      document.getElementById("empID").value=empID;
+      document.getElementById("taskID").value=taskID;
+      document.getElementById("task").value=task;
+      document.getElementById("dueDate").value=dueDate;
+      document.getElementById("b1").value="Update"
+  }
+</script>
+</html>
